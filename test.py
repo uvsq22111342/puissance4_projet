@@ -147,9 +147,11 @@ def jeton(event):
             joueur[cpt] += 1
             update()
             if joueur[cpt] == manche:
-                racine.destroy()
+                label["text"] = "Le joueur "+str(cpt + 1) + " a gagné !"
             else:
                 reboot()
+        if nulle(coord):
+            reboot()
         cpt = 1 - cpt
 
 
@@ -203,6 +205,14 @@ def diag2(list):
                 ord += hauteur
         if S == puissance - 1:
             return True
+
+def nulle(coord):
+    S = 0
+    for i in coord:
+        if i != []:
+            S += 1
+    if S == 0:
+        return True
 
 
 def retour(event):
@@ -266,6 +276,7 @@ racine.bind('<Button-1>',jeton)
 racine.bind('<BackSpace>',retour)
 racine.bind('s',sauvegarder)
 racine.bind('c',charger)
+
 
 
 racine.mainloop()
