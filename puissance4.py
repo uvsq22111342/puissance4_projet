@@ -78,7 +78,6 @@ def charger(event):
 
 def trad(list):
     " Transforme la liste du fichier texte en liste utilisable par le code "
-    l = []
     z = [ '[', '(',',',']',')','\n',' ']
     l = [int(k) for k in list if k not in z]
     l.append(1)
