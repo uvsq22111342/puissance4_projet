@@ -21,6 +21,7 @@ largeur = math.floor(WIDTH / colonne)
 
 
 def sauvegarder(event):
+    " Sauvegarde la partie dans un fichier texte"
     global cpt, coord_red_tot,coord_yellow_tot, colonne, ligne, puissance, manche, joueur
     f_input=open("puissance4.txt",'w')
     f_input.write(str(colonne) + "\n")
@@ -36,6 +37,7 @@ def sauvegarder(event):
 
 
 def charger(event):
+    " Charge la partie du fichier texte "
     global cpt, coord_red_tot,coord_yellow_tot, coord,coord_red_abs,coord_red_ord,coord_yellow_abs,coord_yellow_ord, colonne, ligne, puissance, manche, joueur, largeur, hauteur
     reboot()
     f_output = open("puissance4.txt",'r')
@@ -75,6 +77,7 @@ def charger(event):
 
 
 def trad(list):
+    " Transforme la liste du fichier texte en liste utilisable par le code "
     l = []
     z = [ '[', '(',',',']',')','\n',' ']
     l = [int(k) for k in list if k not in z]
@@ -124,6 +127,7 @@ for i in range(colonne):
 
 
 def jeton(event):
+    " Place les jetons en fonction de la couleurs et des cases disponibles "
     global cpt, coord, coord_red_abs,coord_red_ord,coord_yellow_abs,coord_yellow_ord, coord_red_tot,coord_yellow_tot, joueur
     colox = math.floor(event.x / largeur)
     if colox <= colonne:
@@ -153,6 +157,7 @@ def jeton(event):
 
 
 def win_try(list1,list2):
+    " Vérifie s'il y a puissances jetons de la meme couleur alignés verticalement ou horizontalement "
     global puissance
     L = []
     if len(list1) > puissance - 1:
@@ -172,7 +177,8 @@ def win_try(list1,list2):
                         return True
 
 
-def diag(list):    #diagonale droite bas ou haut gauche
+def diag(list):
+    " Verifie s'il y a puissances jetons de la meme couleur alignés diagonalement droite bas ou haut gauche "
     global puissance
     for (abs,ord) in list:
         S = 0
@@ -185,7 +191,8 @@ def diag(list):    #diagonale droite bas ou haut gauche
             return True
 
 
-def diag2(list):    #diag haut droite ou bas gauche
+def diag2(list):
+    " Verifie s'il y a puissances jetons de la meme couleur alignés diagonalement haut droite ou bas gauche "
     global puissance
     for (abs,ord) in list:
         S = 0
@@ -199,6 +206,7 @@ def diag2(list):    #diag haut droite ou bas gauche
 
 
 def retour(event):
+    " Supprime le dernier jeton joué "
     global cpt, coord_red_abs, coord_yellow_abs, coord_red_ord, coord_yellow_ord, coord_red_tot, coord_yellow_tot
     try:
         if cpt == 0:
@@ -222,6 +230,7 @@ def retour(event):
 
 
 def reboot():
+    " Redémarre la partie "
     global cpt, coord, coord_red_abs,coord_red_ord,coord_yellow_abs,coord_yellow_ord, coord_red_tot,coord_yellow_tot, largeur, hauteur
     coord = [[(i*largeur,j*hauteur) for j in range(1,ligne +1)] for i in range(1,colonne+1)]
     coord_yellow_abs = []
@@ -239,6 +248,7 @@ def reboot():
 
 
 def update():
+    " Rafraichis en fonction du nombre de manches gagnés "
     if joueur[0] > 1:
         label2["text"] = "joueur 1 a gagné " + str(joueur[0]) + " manches"
     else:
@@ -259,8 +269,3 @@ racine.bind('c',charger)
 
 
 racine.mainloop()
-
-# changer le tour des joueurs
-
-# perfectionner l'interface graphique
-# List out of index range 
