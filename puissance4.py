@@ -4,91 +4,20 @@ import tkinter as tk
 import random as random
 import math as math
 
-
+# Parametres à rentrer
 colonne = int(input("Choisir un nombre de colonnes"))
 ligne = int(input("Choisir un nombre de lignes"))
 puissance = int(input("Choisir le nombre de jetons à aligner pour gagner"))
 manche = int(input("Combien de manches faut-il gagner ?"))
+
 joueur = [0,0]
 color = ["lemonchiffon","plum"]
-
-
 HEIGHT = 700
 WIDTH = 700
-
 hauteur = math.floor(HEIGHT / ligne)
 largeur = math.floor(WIDTH / colonne)
 
 
-def sauvegarder(event):
-    " Sauvegarde la partie dans un fichier texte"
-    global cpt, coord_red_tot,coord_yellow_tot, colonne, ligne, puissance, manche, joueur
-    f_input=open("puissance4.txt",'w')
-    f_input.write(str(colonne) + "\n")
-    f_input.write(str(ligne) + "\n")
-    f_input.write(str(coord_red_tot) + "\n")
-    f_input.write(str(coord_yellow_tot) + "\n")
-    f_input.write(str(puissance) + "\n")
-    f_input.write(str(manche) + "\n")
-    f_input.write(str(joueur[0]) + "\n")
-    f_input.write(str(joueur[1]) + "\n")
-    f_input.write(str(cpt) + "\n")
-    f_input.close()
-
-
-def charger(event):
-    " Charge la partie du fichier texte "
-    global cpt, coord_red_tot,coord_yellow_tot, coord,coord_red_abs,coord_red_ord,coord_yellow_abs,coord_yellow_ord, colonne, ligne, puissance, manche, joueur, largeur, hauteur
-    reboot()
-    f_output = open("puissance4.txt",'r')
-    colonne = int(f_output.readline())
-    ligne = int(f_output.readline())
-    hauteur = math.floor(HEIGHT / ligne)
-    largeur = math.floor(WIDTH / colonne)
-    coord_red_tot = trad(list(f_output.readline()))
-    coord_yellow_tot = trad(list(f_output.readline()))
-    puissance = int(f_output.readline())
-    manche = int(f_output.readline())
-    joueur1 = int(f_output.readline())
-    joueur2 = int(f_output.readline())
-    joueur = [joueur1, joueur2]
-    cpt = int(f_output.readline())
-    f_output.close()
-    coord = [[(i*largeur,j*hauteur) for j in range(1,ligne +1)] for i in range(1,colonne+1)]
-    for i in range(colonne):
-        for j in range(ligne):
-            canvas.create_rectangle((i * largeur,j * hauteur),((i+1) *  largeur,(j+1) * hauteur),fill = "royalblue")
-    for i in coord_red_tot:
-        canvas.create_oval((i[0]-largeur,i[1]-hauteur),i, fill = "plum")
-        for j in coord:
-            if i in j:
-                j.remove(i)
-    for i in coord_yellow_tot:
-        canvas.create_oval((i[0]-largeur,i[1]-hauteur),i, fill = "lemonchiffon")
-        for j in coord:
-            if i in j:
-                j.remove(i)
-    coord_red_abs = [i[0] for i in coord_red_tot]
-    coord_red_ord = [i[1] for i in coord_red_tot]
-    coord_yellow_abs = [i[0] for i in coord_yellow_tot]
-    coord_yellow_ord = [i[1] for i in coord_yellow_tot]
-    update()
-    
-
-
-def trad(list):
-    " Transforme la liste du fichier texte en liste utilisable par le code "
-    z = [ '[', '(',',',']',')','\n',' ']
-    l = [int(k) for k in list if k not in z]
-    l.append(1)
-    L = []
-    if len(l)%3 == 1:
-        l.pop()
-    for i in range(0,len(l),3):
-        j = int(str(l[i])+str(l[i+1])+str(l[i+2]))
-        L.append(j)
-    W = [(L[i],L[i+1]) for i in range(0,len(L)-1,2)]
-    return W
 
 
 racine = tk.Tk()
@@ -98,7 +27,6 @@ canvas = tk.Canvas(racine, bg="royalblue", height = HEIGHT, width = WIDTH)
 label = tk.Label(racine, text="Nombre de manches à gagner : "+str(manche), font=("helvetica", "20")) 
 label2 = tk.Label(racine, text="joueur 1 a gagné " + str(joueur[0]) + " manche ", font=("helvetica", "20"),bg = color[0])
 label3 = tk.Label(racine, text="joueur 2 a gagné " + str(joueur[1]) + " manche ", font=("helvetica", "20"),bg = color[1])
-
 
 canvas.grid(row = 0, column = 0, rowspan = ligne, columnspan = colonne)
 label.grid(row = 0, column = colonne)
@@ -206,6 +134,7 @@ def diag2(list):
             return True
 
 def nulle(coord):
+    " Vérifie si la partie est nulle "
     S = 0
     for i in coord:
         if i != []:
@@ -267,6 +196,77 @@ def update():
     else:
         label3["text"] = "joueur 2 a gagné " + str(joueur[1]) + " manche"
     label["text"] = "Nombre de manches à gagner : "+str(manche)
+
+
+def sauvegarder(event):
+    " Sauvegarde la partie dans un fichier texte"
+    global cpt, coord_red_tot,coord_yellow_tot, colonne, ligne, puissance, manche, joueur
+    f_input=open("puissance4.txt",'w')
+    f_input.write(str(colonne) + "\n")
+    f_input.write(str(ligne) + "\n")
+    f_input.write(str(coord_red_tot) + "\n")
+    f_input.write(str(coord_yellow_tot) + "\n")
+    f_input.write(str(puissance) + "\n")
+    f_input.write(str(manche) + "\n")
+    f_input.write(str(joueur[0]) + "\n")
+    f_input.write(str(joueur[1]) + "\n")
+    f_input.write(str(cpt) + "\n")
+    f_input.close()
+
+
+def charger(event):
+    " Charge la partie du fichier texte "
+    global cpt, coord_red_tot,coord_yellow_tot, coord,coord_red_abs,coord_red_ord,coord_yellow_abs,coord_yellow_ord, colonne, ligne, puissance, manche, joueur, largeur, hauteur
+    reboot()
+    f_output = open("puissance4.txt",'r')
+    colonne = int(f_output.readline())
+    ligne = int(f_output.readline())
+    hauteur = math.floor(HEIGHT / ligne)
+    largeur = math.floor(WIDTH / colonne)
+    coord_red_tot = trad(list(f_output.readline()))
+    coord_yellow_tot = trad(list(f_output.readline()))
+    puissance = int(f_output.readline())
+    manche = int(f_output.readline())
+    joueur1 = int(f_output.readline())
+    joueur2 = int(f_output.readline())
+    joueur = [joueur1, joueur2]
+    cpt = int(f_output.readline())
+    f_output.close()
+    coord = [[(i*largeur,j*hauteur) for j in range(1,ligne +1)] for i in range(1,colonne+1)]
+    for i in range(colonne):
+        for j in range(ligne):
+            canvas.create_rectangle((i * largeur,j * hauteur),((i+1) *  largeur,(j+1) * hauteur),fill = "royalblue")
+    for i in coord_red_tot:
+        canvas.create_oval((i[0]-largeur,i[1]-hauteur),i, fill = "plum")
+        for j in coord:
+            if i in j:
+                j.remove(i)
+    for i in coord_yellow_tot:
+        canvas.create_oval((i[0]-largeur,i[1]-hauteur),i, fill = "lemonchiffon")
+        for j in coord:
+            if i in j:
+                j.remove(i)
+    coord_red_abs = [i[0] for i in coord_red_tot]
+    coord_red_ord = [i[1] for i in coord_red_tot]
+    coord_yellow_abs = [i[0] for i in coord_yellow_tot]
+    coord_yellow_ord = [i[1] for i in coord_yellow_tot]
+    update()
+    
+
+
+def trad(list):
+    " Transforme la liste du fichier texte en liste utilisable par le code "
+    z = [ '[', '(',',',']',')','\n',' ']
+    l = [int(k) for k in list if k not in z]
+    l.append(1)
+    L = []
+    if len(l)%3 == 1:
+        l.pop()
+    for i in range(0,len(l),3):
+        j = int(str(l[i])+str(l[i+1])+str(l[i+2]))
+        L.append(j)
+    W = [(L[i],L[i+1]) for i in range(0,len(L)-1,2)]
+    return W
 
 
 
